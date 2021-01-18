@@ -15,7 +15,7 @@ include_directories(
 
 enable_testing()
 
-set(CMAKE_CXX_FLAGS "-Wpedantic -g -Wall -Wextra")
+#set(CMAKE_CXX_FLAGS "-g -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 arch=native")
 
 add_library(
@@ -29,7 +29,7 @@ add_library(
 )
 
 link_libraries(
-  morse_code,
+  morse_code
   morse
 )
 
