@@ -45,7 +45,8 @@ public:
 
   // Funkcja "wydajaca dzwieki" na podstawie kodu morsa - przedstawionego w
   // postaci klasy @morse_code
-  void emit(morse_code);
+  virtual void emit(morse_code);
+  virtual ~morse() {};
 
 private:
   unsigned freq_;
