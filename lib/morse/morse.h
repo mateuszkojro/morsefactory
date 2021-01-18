@@ -48,7 +48,7 @@ public:
   virtual void emit(morse_code);
   virtual ~morse() {};
 
-private:
+protected:
   unsigned freq_;
   unsigned dot_time_;
   unsigned dash_time_;
