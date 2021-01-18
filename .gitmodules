@@ -1,3 +1,3 @@
-[submodule "debug_cpp"]
-	path = ./lib/debug_cpp
-	url = "https://github.com/mateuszkojro/debug_cpp.git"
+[submodule "lib/debug_cpp"]
+	path = lib/debug_cpp
+	url = https://github.com/mateuszkojro/debug_cpp.git
