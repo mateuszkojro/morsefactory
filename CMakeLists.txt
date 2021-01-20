@@ -44,4 +44,4 @@ add_executable(
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_test(NAME licznik COMMAND licznik)
+add_test(NAME morse_factory COMMAND morse_factory)
