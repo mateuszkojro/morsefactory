@@ -20,6 +20,9 @@ void press_scroll_lock();
 
 class morseFile : public morse {
 public:
+  morseFile() {
+	  path_ = "a.out";
+	}
 	void set_path(std::string path) {
 		path_ = path;
 	}
@@ -34,7 +37,7 @@ public:
 		file << "pause_time:" << this->pause_time_<< std::endl;
 		file << "char_pause:" << this->char_pause_<< std::endl;
 
-		file << code;
+		file << "code: " << code;
 
 		file.close();
 	}
