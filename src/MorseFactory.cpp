@@ -26,6 +26,7 @@ void blink_scroll_lock(unsigned time) {
 
 enum Operation { ToFile, ToConsole, ToAudio, ToLight };
 
+// Parsujemy podany string aby odczytac z niego odpoiwednie parametry
 Operation parse(std::string text) {
   if (text == "plik") {
     return Operation::ToFile;
@@ -40,6 +41,8 @@ Operation parse(std::string text) {
   }
 }
 
+// zgodnie z zadaniem ustawiamy output na ktory wyslemy morsa
+// czyli towrzymy odpowiednia klase na naszym polu prywatnym
 void MorseFactory::set_output(out option) {
 
   delete data_;
@@ -59,8 +62,9 @@ void MorseFactory::set_output(out option) {
   }
 }
 
+// yyy jeszcze w sumie nie wiem co to powinno robic 
 void MorseFactory::set_external_info(std::string text) {
-
+//mozna by w sumie dodac set external info for blink zeby wybrac klawisz
   delete data_;
   switch (parse(text)) {
   case Operation::ToFile:
@@ -78,5 +82,7 @@ void MorseFactory::set_external_info(std::string text) {
   }
 }
 
+// Klasa morse i pochodne przeciazaja emmit takze nasz konwert jest tylko
+// wraperem dookola niej
 void MorseFactory::convert(std::string text) { data_->emit(morse_code(text)); }
 void MorseFactory::convert(int text) { data_->emit(morse_code((long)text)); }
