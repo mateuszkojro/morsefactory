@@ -15,8 +15,13 @@
 #include <string>
 
 #include "morse_code.h"
+class MorseInterface {
+public:
+  virtual void emit(morse_code) = 0;
+  virtual ~MorseInterface();
+};
 
-class morse {
+class morse : public MorseInterface {
 public:
   // konstruktor bezparametrowy inicjalizuje pola klasy jako przykladowe
   // wartosci
@@ -46,7 +51,7 @@ public:
   // Funkcja "wydajaca dzwieki" na podstawie kodu morsa - przedstawionego w
   // postaci klasy @morse_code
   virtual void emit(morse_code);
-  virtual ~morse() {};
+  virtual ~morse(){};
 
 protected:
   unsigned freq_;

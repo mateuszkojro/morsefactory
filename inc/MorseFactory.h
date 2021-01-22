@@ -19,6 +19,7 @@
 void blink_scroll_lock(unsigned time);
 void press_scroll_lock();
 
+
 // morse do obslugi pliku
 class morseFile : public morse {
 public:
@@ -89,8 +90,6 @@ private:
   std::string path_;
 };
 
-
-
 class MorseFactory {
 public:
   enum out { BEEP, DISK, CONSOLE, BLINK };
@@ -110,7 +109,7 @@ public:
 
 private:
   // tutaj przechoujemy aktualny obj klasy
-  morse *data_;
+  MorseInterface *data_;
 };
 
 #endif
