@@ -28,24 +28,24 @@ enum Operation { ToFile, ToConsole, ToAudio, ToLight };
 // czyli towrzymy odpowiednia klase na naszym polu prywatnym
 void MorseFactory::set_output(out option) {
 
-  delete data_;
+  // delete data_;
   switch (option) {
   case out::DISK:
-    data_ = new morseFile(this->file_path_.value_or("a.out"));
+    data_ = std::make_unique<morseFile>(this->file_path_.value_or("a.out"));
     break;
   case out::BEEP:
-    data_ = new morse(this->freq_.value_or(800), this->dot_time_.value_or(200),
-                      this->dash_time_.value_or(400),
-                      this->pause_time_.value_or(100),
-                      this->char_pause_.value_or(100));
+    data_ = std::make_unique<morse>(
+        this->freq_.value_or(800), this->dot_time_.value_or(200),
+        this->dash_time_.value_or(400), this->pause_time_.value_or(100),
+        this->char_pause_.value_or(100));
     break;
   case out::CONSOLE:
-    data_ = new morseTerminal;
+    data_ = std::make_unique<morseTerminal>();
     break;
   case out::BLINK:
-    data_ = new morseLight(this->dot_time_.value_or(400),
-                           this->dash_time_.value_or(800),
-                           this->pause_time_.value_or(200));
+    data_ = std::make_unique<morseLight>(this->dot_time_.value_or(400),
+                                         this->dash_time_.value_or(800),
+                                         this->pause_time_.value_or(200));
     break;
   }
 }
@@ -91,11 +91,11 @@ void MorseFactory::set_external_info(std::string text) {
   }
 
   // jak ktos poda wiecej wartosci to zostana po prostu zignorowane
-  freq_ = options[0];
-  dot_time_ = options[1];
-  dash_time_ = options[2];
-  pause_time_ = options[3];
-  char_pause_ = options[4];
+  this->freq_ = options[0];
+  this->dot_time_ = options[1];
+  this->dash_time_ = options[2];
+  this->pause_time_ = options[3];
+  this->char_pause_ = options[4];
 }
 
 // Klasa morse i pochodne przeciazaja emmit takze nasz konwert jest tylko
@@ -103,6 +103,33 @@ void MorseFactory::set_external_info(std::string text) {
 void MorseFactory::convert(std::string text) const {
   data_->emit(morse_code(text));
 }
+void MorseFactory::convert(double text) const {
+  data_->emit(morse_code(text));
+}
 void MorseFactory::convert(int text) const {
   data_->emit(morse_code((long)text));
+}
+
+MorseFactory::MorseFactory(const MorseFactory &other) {
+  this->data_ = other.data_->clone();
+  this->freq_ = other.freq_;
+  this->dot_time_ = other.dot_time_;
+  this->dash_time_ = other.dash_time_;
+  this->pause_time_ = other.pause_time_;
+  this->char_pause_ = other.char_pause_;
+  this->file_path_ = other.file_path_;
+}
+
+const MorseFactory &MorseFactory::operator=(const MorseFactory &other) {
+  if (this == &other) {
+    return *this;
+  }
+  this->data_ = other.data_->clone();
+  this->freq_ = other.freq_;
+  this->dot_time_ = other.dot_time_;
+  this->dash_time_ = other.dash_time_;
+  this->pause_time_ = other.pause_time_;
+  this->char_pause_ = other.char_pause_;
+  this->file_path_ = other.file_path_;
+  return *this;
 }

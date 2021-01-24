@@ -23,6 +23,9 @@ class morseFile : public MorseInterface {
 public:
   morseFile() { path_ = "a.out"; }
   morseFile(std::string path) { this->path_ = path; }
+  std::unique_ptr<MorseInterface> clone() override {
+    return std::make_unique<morseFile>(*this);
+  }
   void set_path(std::string path) { path_ = path; }
   std::string get_path() { return path_; }
   virtual void emit(morse_code code) final override {
@@ -44,6 +47,9 @@ private:
 class morseTerminal : public MorseInterface {
 public:
   morseTerminal() : MorseInterface() {}
+  std::unique_ptr<MorseInterface> clone() override {
+    return std::make_unique<morseTerminal>(*this);
+  }
   virtual void emit(morse_code code) final override {
     std::cout << "code: " << code << std::endl;
   }
@@ -53,6 +59,9 @@ public:
 class morseLight : public MorseInterface {
 
 public:
+  std::unique_ptr<MorseInterface> clone() override {
+    return std::make_unique<morseLight>(*this);
+  }
   morseLight(unsigned dot_time, unsigned dash_time, unsigned pause_time)
       : MorseInterface() {
     this->dot_time_ = dot_time;
@@ -89,16 +98,17 @@ public:
   enum out { BEEP, DISK, CONSOLE, BLINK };
 
   // domyslnie tworze obiekt typu morse = arbitrary decision
-  MorseFactory() { data_ = new morse; };
-  ~MorseFactory() { delete data_; };
-  // nie chcemy zeby morsefactory poniewaz nadpisalo to by nasze vtable
+  MorseFactory() { data_ = std::make_unique<morse>(); };
+  ~MorseFactory(){};
+  // nie chcemy zeby MorseFactory poniewaz nadpisalo to by nasze vtable
   // bylo kopiowane jezeli chcemy skopiowac obiekt
   // powinnismy pobrac obiekt wewnetrzny maybe typeid can solve that with ifs
-  const MorseFactory &operator=(const MorseFactory &other) = delete;
-  MorseFactory(const MorseFactory &) = delete;
+  const MorseFactory &operator=(const MorseFactory &other); // = delete;
+  MorseFactory(const MorseFactory &);                       //= delete;
   void set_output(out);
   void set_external_info(std::string);
   void convert(std::string) const;
+  void convert(double) const;
   void convert(int) const;
 
 private:
@@ -110,7 +120,7 @@ private:
   std::optional<unsigned> char_pause_;
   std::optional<std::string> file_path_;
   // tutaj przechoujemy aktualny obj klasy
-  MorseInterface *data_;
+  std::unique_ptr<MorseInterface> data_;
 };
 
 #endif

@@ -17,7 +17,8 @@
 #include "morse_code.h"
 class MorseInterface {
 public:
-  virtual void emit(morse_code) = 0;
+  virtual void emit(morse_code) = NULL;
+  virtual std::unique_ptr<MorseInterface> clone() = NULL;
   virtual ~MorseInterface() {}
 };
 
@@ -32,6 +33,10 @@ public:
     pause_time_ = 100;
     char_pause_ = 100;
   };
+
+  std::unique_ptr<MorseInterface> clone() override {
+    return std::make_unique<morse>(*this);
+  }
 
   morse(unsigned freq, unsigned dot_time, unsigned dash_time,
         unsigned pause_time, unsigned char_pause) {
