@@ -1,7 +1,4 @@
 #include "MorseFactory.h"
-#include "debug.h"
-#include "morse_code.h"
-#include <string>
 
 // "klika" scroll lock
 void morseLight::press_scroll_lock() {
@@ -49,41 +46,35 @@ void MorseFactory::set_output(out option) {
   delete data_;
   switch (option) {
   case out::DISK:
-    data_ = new morseFile;
+    data_ = new morseFile(this->file_path_.value_or("a.out"));
     break;
   case out::BEEP:
-    data_ = new morse;
+    data_ = new morse(this->freq_.value_or(100), this->dot_time_.value_or(100),
+                      this->dash_time_.value_or(100),
+                      this->pause_time_.value_or(100),
+                      this->char_pause_.value_or(100));
     break;
   case out::CONSOLE:
     data_ = new morseTerminal;
     break;
   case out::BLINK:
-    data_ = new morseLight;
+    data_ = new morseLight(this->dot_time_.value_or(100),
+                           this->dash_time_.value_or(100),
+                           this->pause_time_.value_or(100));
     break;
   }
 }
 
-// yyy jeszcze w sumie nie wiem co to powinno robic 
+// yyy jeszcze w sumie nie wiem co to powinno robic
 void MorseFactory::set_external_info(std::string text) {
-//mozna by w sumie dodac set external info for blink zeby wybrac klawisz
-  delete data_;
-  switch (parse(text)) {
-  case Operation::ToFile:
-    data_ = new morseFile;
-    break;
-  case Operation::ToAudio:
-    data_ = new morse;
-    break;
-  case Operation::ToConsole:
-    data_ = new morseTerminal;
-    break;
-  case Operation::ToLight:
-    data_ = new morseLight;
-    break;
-  }
+  // mozna by w sumie dodac set external info for blink zeby wybrac klawisz
 }
 
 // Klasa morse i pochodne przeciazaja emmit takze nasz konwert jest tylko
 // wraperem dookola niej
-void MorseFactory::convert(std::string text) { data_->emit(morse_code(text)); }
-void MorseFactory::convert(int text) { data_->emit(morse_code((long)text)); }
+void MorseFactory::convert(std::string text) const {
+  data_->emit(morse_code(text));
+}
+void MorseFactory::convert(int text) const {
+  data_->emit(morse_code((long)text));
+}

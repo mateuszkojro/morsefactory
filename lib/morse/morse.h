@@ -18,7 +18,7 @@
 class MorseInterface {
 public:
   virtual void emit(morse_code) = 0;
-  virtual ~MorseInterface();
+  virtual ~MorseInterface() {}
 };
 
 class morse : public MorseInterface {
@@ -32,6 +32,15 @@ public:
     pause_time_ = 100;
     char_pause_ = 100;
   };
+
+  morse(unsigned freq, unsigned dot_time, unsigned dash_time,
+        unsigned pause_time, unsigned char_pause) {
+    this->freq_ = freq;
+    this->dot_time_ = dot_time;
+    this->dash_time_ = dash_time;
+    this->pause_time_ = pause_time;
+    this->char_pause_ = char_pause;
+  }
 
   // ustawianie parametrow dotyczacyhch "emitowania" dzwiekow
   void setPause(unsigned pause_time);
@@ -50,7 +59,7 @@ public:
 
   // Funkcja "wydajaca dzwieki" na podstawie kodu morsa - przedstawionego w
   // postaci klasy @morse_code
-  virtual void emit(morse_code);
+  virtual void emit(morse_code) override;
   virtual ~morse(){};
 
 protected:
