@@ -7,6 +7,7 @@
 #include <iostream>
 #include <optional>
 #include <string>
+#include <vector>
 
 /*  Klasa MorseFactory
  *  Autor: Mateusz Kojro
@@ -16,18 +17,6 @@
  *    -
  *
  */
-
-/*
-Sczerze moiwac jestem rozdarty pomiedzy 2 implemetnacjami taka w ktorej klasy
-dziedzica tylko iwylacznie po interface i takiej w ktorej dziedzica rownierz po
-morse jedna zapewnia nam brak powtralnosci kodu ( we morse mamy napisane juz
-operatory gettery i settery ) natomiast droga ogrnaicza pola obecne w klasie do
-tylkjo i wylacznie tych wymaganych ( teorteczynie w klasie morseFile nie
-potrzbuje czestotliwosci ani dlugosci dzwiekow ) na koncu uznalem ze wszytswko
-zaalezy w sumie od sytuacji wiec dobralem te 2 metody zaelznie od tego ktoraa w
-danym przypadku mial wiekszy sens
-
-*/
 
 // morse do obslugi pliku
 class morseFile : public MorseInterface {
@@ -113,6 +102,7 @@ public:
   void convert(int) const;
 
 private:
+  static bool is_whitespace(char);
   std::optional<unsigned> freq_;
   std::optional<unsigned> dot_time_;
   std::optional<unsigned> dash_time_;
