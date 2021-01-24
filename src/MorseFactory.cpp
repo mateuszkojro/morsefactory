@@ -49,8 +49,7 @@ void MorseFactory::set_output(out option) {
     data_ = new morseFile(this->file_path_.value_or("a.out"));
     break;
   case out::BEEP:
-    data_ = new morse(this->freq_.value_or(800),
-                      this->dot_time_.value_or(200),
+    data_ = new morse(this->freq_.value_or(800), this->dot_time_.value_or(200),
                       this->dash_time_.value_or(400),
                       this->pause_time_.value_or(100),
                       this->char_pause_.value_or(100));
@@ -66,10 +65,52 @@ void MorseFactory::set_output(out option) {
   }
 }
 
-// yyy jeszcze w sumie nie wiem co to powinno robic
+bool MorseFactory::is_whitespace(char znak) {
+  // uznajemy ze whitespacem jest tab newline lub spacja
+  return znak == '\t' || znak == '\n' || znak == ' ';
+}
+
 void MorseFactory::set_external_info(std::string text) {
   // mozna by w sumie dodac set external info for blink zeby wybrac klawisz
 
+  std::string buffer = "";
+  std::vector<unsigned> options;
+
+  // przechodzimy po wszytskihc literach
+  for (char letter : text) {
+    if (is_whitespace(letter)) {
+      // jezeli natrafiamy na whitesapce to analizuemy bufor
+      char *conversion_failed;
+      // probujemy konwerotwac na liczbe
+      unsigned converted = strtol(buffer.c_str(), &conversion_failed, 10);
+      if (*conversion_failed) {
+        // jezeli konwrsjaa sie nie udala to znaczy ze nie liczba zaapisuje jako
+        // nazwe pliku
+        this->file_path_ = buffer;
+      } else {
+        // jezeli sie udalo to po prostu dodaje do vectora
+        options.push_back(converted);
+      }
+      // czyszcze buffer
+      buffer = "";
+    } else {
+      // inaczaczej dodajemy znak do buffora
+      buffer += letter;
+    }
+  }
+
+  // jezeli podano za malo wartosci to wypelniamy pustymi az do czasu kiedy
+  // bedziemy mieli dopowiedzni rozmiar
+  while (options.size() < 4) {
+    options.push_back({});
+  }
+
+  // jak ktos poda wiecej wartosci to zostana po prostu zignorowane
+  freq_ = std::make_optional(options[0]);
+  dot_time_ = std::make_optional(options[1]);
+  dash_time_ = std::make_optional(options[2]);
+  pause_time_ = std::make_optional(options[3]);
+  char_pause_ = std::make_optional(options[4]);
 }
 
 // Klasa morse i pochodne przeciazaja emmit takze nasz konwert jest tylko
