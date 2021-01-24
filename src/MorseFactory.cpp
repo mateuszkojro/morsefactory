@@ -1,4 +1,5 @@
 #include "MorseFactory.h"
+#include <optional>
 
 // "klika" scroll lock
 void morseLight::press_scroll_lock() {
@@ -22,22 +23,6 @@ void morseLight::blink_scroll_lock(unsigned time) {
 }
 
 enum Operation { ToFile, ToConsole, ToAudio, ToLight };
-
-// @TODO - what up with that
-// Parsujemy podany string aby odczytac z niego odpoiwednie parametry
-Operation parse(std::string text) {
-  if (text == "plik") {
-    return Operation::ToFile;
-  } else if (text == "number") {
-    return Operation::ToConsole;
-  } else if (text == "light") {
-    return Operation::ToLight;
-  } else if (text == "console") {
-    return Operation::ToConsole;
-  } else {
-    ERR("String cannot be parsed corectly");
-  }
-}
 
 // zgodnie z zadaniem ustawiamy output na ktory wyslemy morsa
 // czyli towrzymy odpowiednia klase na naszym polu prywatnym
@@ -74,7 +59,7 @@ void MorseFactory::set_external_info(std::string text) {
   // mozna by w sumie dodac set external info for blink zeby wybrac klawisz
 
   std::string buffer = "";
-  std::vector<unsigned> options;
+  std::vector<std::optional<unsigned>> options;
 
   // przechodzimy po wszytskihc literach
   for (char letter : text) {
@@ -89,7 +74,7 @@ void MorseFactory::set_external_info(std::string text) {
         this->file_path_ = buffer;
       } else {
         // jezeli sie udalo to po prostu dodaje do vectora
-        options.push_back(converted);
+        options.push_back(std::make_optional(converted));
       }
       // czyszcze buffer
       buffer = "";
@@ -101,16 +86,16 @@ void MorseFactory::set_external_info(std::string text) {
 
   // jezeli podano za malo wartosci to wypelniamy pustymi az do czasu kiedy
   // bedziemy mieli dopowiedzni rozmiar
-  while (options.size() < 4) {
-    options.push_back({});
+  while (options.size() < 5) {
+    options.push_back(std::nullopt);
   }
 
   // jak ktos poda wiecej wartosci to zostana po prostu zignorowane
-  freq_ = std::make_optional(options[0]);
-  dot_time_ = std::make_optional(options[1]);
-  dash_time_ = std::make_optional(options[2]);
-  pause_time_ = std::make_optional(options[3]);
-  char_pause_ = std::make_optional(options[4]);
+  freq_ = options[0];
+  dot_time_ = options[1];
+  dash_time_ = options[2];
+  pause_time_ = options[3];
+  char_pause_ = options[4];
 }
 
 // Klasa morse i pochodne przeciazaja emmit takze nasz konwert jest tylko
