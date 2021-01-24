@@ -1,19 +1,21 @@
-#include <iostream>
-#include <windows.h>
-#include <time.h>
-#include "debug.h"
 #include "MorseFactory.h"
+#include "debug.h"
+#include <iostream>
+#include <time.h>
+#include <windows.h>
 //#define _WIN32_WINNT 0x500//0x403
 
-
 int main() {
-	MorseFactory f;
-	
-	f.set_external_info("light");
-	f.convert("ala ma kota");
+  MorseFactory f;
 
-	std::cout << "hello_world";
+  f.set_output(MorseFactory::CONSOLE);
+  f.convert("ala ma kota");
 
-	return 0;
+  f.set_external_info("light");
+  f.convert("ala ma kota");
+
+  f.set_output(MorseFactory::BEEP);
+  f.convert("ala ma kota");
+
+  return 0;
 }
-
