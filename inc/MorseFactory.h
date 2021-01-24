@@ -16,9 +16,6 @@
  *    - Lacze morse_factory z klasa morse z wczesniejszego zadania
  *
  */
-void blink_scroll_lock(unsigned time);
-void press_scroll_lock();
-
 
 // morse do obslugi pliku
 class morseFile : public morse {
@@ -48,6 +45,9 @@ private:
 
 // morse do migania klawiszem na klawiaturze
 class morseLight : public morse {
+  static void blink_scroll_lock(unsigned time);
+  static void press_scroll_lock();
+
 public:
   virtual void emit(morse_code code) final override {
     for (auto znak : code.get_code()) {

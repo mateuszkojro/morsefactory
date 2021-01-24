@@ -4,7 +4,7 @@
 #include <string>
 
 // "klika" scroll lock
-void press_scroll_lock() {
+void morseLight::press_scroll_lock() {
   INPUT in[2];
   in[0].type = INPUT_KEYBOARD;
   in[0].ki.wVk = VK_SCROLL;
@@ -18,7 +18,7 @@ void press_scroll_lock() {
 }
 
 // zmienia stan scroll-locka na podany czas
-void blink_scroll_lock(unsigned time) {
+void morseLight::blink_scroll_lock(unsigned time) {
   press_scroll_lock();
   Sleep(time);
   press_scroll_lock();
@@ -26,6 +26,7 @@ void blink_scroll_lock(unsigned time) {
 
 enum Operation { ToFile, ToConsole, ToAudio, ToLight };
 
+// @TODO - what up with that
 // Parsujemy podany string aby odczytac z niego odpoiwednie parametry
 Operation parse(std::string text) {
   if (text == "plik") {
