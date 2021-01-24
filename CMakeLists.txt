@@ -15,8 +15,8 @@ include_directories(
 
 enable_testing()
 
-#set(CMAKE_CXX_FLAGS "-g -Wall")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 arch=native")
+set(CMAKE_CXX_FLAGS "-std=c++20 -Wall")
+set(CMAKE_CXX_FLAGS_RELEASE "-std=c++20 -O3 arch=native")
 
 add_library(
   morse STATIC
@@ -42,6 +42,6 @@ add_executable(
 )
 
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 add_test(NAME morse_factory COMMAND morse_factory)
