@@ -49,8 +49,9 @@ void MorseFactory::set_output(out option) {
     data_ = new morseFile(this->file_path_.value_or("a.out"));
     break;
   case out::BEEP:
-    data_ = new morse(this->freq_.value_or(100), this->dot_time_.value_or(100),
-                      this->dash_time_.value_or(100),
+    data_ = new morse(this->freq_.value_or(800),
+                      this->dot_time_.value_or(200),
+                      this->dash_time_.value_or(400),
                       this->pause_time_.value_or(100),
                       this->char_pause_.value_or(100));
     break;
@@ -58,9 +59,9 @@ void MorseFactory::set_output(out option) {
     data_ = new morseTerminal;
     break;
   case out::BLINK:
-    data_ = new morseLight(this->dot_time_.value_or(100),
-                           this->dash_time_.value_or(100),
-                           this->pause_time_.value_or(100));
+    data_ = new morseLight(this->dot_time_.value_or(400),
+                           this->dash_time_.value_or(800),
+                           this->pause_time_.value_or(200));
     break;
   }
 }
@@ -68,6 +69,7 @@ void MorseFactory::set_output(out option) {
 // yyy jeszcze w sumie nie wiem co to powinno robic
 void MorseFactory::set_external_info(std::string text) {
   // mozna by w sumie dodac set external info for blink zeby wybrac klawisz
+
 }
 
 // Klasa morse i pochodne przeciazaja emmit takze nasz konwert jest tylko
