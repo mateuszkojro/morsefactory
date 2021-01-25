@@ -1,9 +1,11 @@
 /*
         Autor: Mateus Kojro
         Opis: Klasa umozliwiajaca nadawanie sygnalow w kodzie morsa poprzez
-   wbudowane glosnii komputera, lub wyswietlanie traskryptu Zmiany: 9.11 -
-   Utworzono, translacja dla malych liter, proste przeciazenie @operatora<<,
-   prosty @emit 15.11 - obsluga '<<' i dodaje manipulator @pause
+   wbudowane glosnii komputera, lub wyswietlanie traskryptu Zmiany: 
+    9.11 - Utworzono, translacja dla malych liter, proste przeciazenie @operatora<<,
+   prosty @emit 
+   15.11 - obsluga '<<' i dodaje manipulator @pause
+   18.01.2020 - male dostosowania zeby lepiej dzialalo z morse factory
 */
 
 #pragma once
@@ -32,9 +34,9 @@ public:
     dash_time_ = 400;
     pause_time_ = 100;
     char_pause_ = 100;
-  };
+  }
 
-  std::unique_ptr<MorseInterface> clone() const override {
+  [[nodiscard]] std::unique_ptr<MorseInterface> clone() const override {
     return std::make_unique<morse>(*this);
   }
 
