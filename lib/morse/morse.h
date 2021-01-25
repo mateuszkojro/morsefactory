@@ -18,8 +18,8 @@
 class MorseInterface {
 public:
   virtual void emit(morse_code) = NULL;
-  virtual std::unique_ptr<MorseInterface> clone() = NULL;
-  virtual ~MorseInterface() {}
+  virtual std::unique_ptr<MorseInterface> clone() const = NULL;
+  virtual ~MorseInterface() = default;
 };
 
 class morse : public MorseInterface {
@@ -34,7 +34,7 @@ public:
     char_pause_ = 100;
   };
 
-  std::unique_ptr<MorseInterface> clone() override {
+  std::unique_ptr<MorseInterface> clone() const override {
     return std::make_unique<morse>(*this);
   }
 
@@ -64,8 +64,8 @@ public:
 
   // Funkcja "wydajaca dzwieki" na podstawie kodu morsa - przedstawionego w
   // postaci klasy @morse_code
-  virtual void emit(morse_code) override;
-  virtual ~morse(){};
+  void emit(morse_code) override;
+  ~morse() override = default;
 
 protected:
   unsigned freq_;

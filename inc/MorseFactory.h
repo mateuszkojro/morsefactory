@@ -22,13 +22,13 @@
 class morseFile : public MorseInterface {
 public:
   morseFile() { path_ = "a.out"; }
-  morseFile(std::string path) { this->path_ = path; }
-  std::unique_ptr<MorseInterface> clone() override {
+  morseFile(const std::string& path) { this->path_ = path; }
+  std::unique_ptr<MorseInterface> clone() const override {
     return std::make_unique<morseFile>(*this);
   }
-  void set_path(std::string path) { path_ = path; }
+  void set_path(const std::string& path) { path_ = path; }
   std::string get_path() { return path_; }
-  virtual void emit(morse_code code) final override {
+  void emit(morse_code code) final {
 
     std::fstream file;
     file.open(this->path_, std::ios::out);
@@ -37,7 +37,7 @@ public:
 
     file.close();
   }
-  virtual ~morseFile(){};
+  ~morseFile() override = default;
 
 private:
   std::string path_;
@@ -47,19 +47,19 @@ private:
 class morseTerminal : public MorseInterface {
 public:
   morseTerminal() : MorseInterface() {}
-  std::unique_ptr<MorseInterface> clone() override {
+  std::unique_ptr<MorseInterface> clone() const override {
     return std::make_unique<morseTerminal>(*this);
   }
-  virtual void emit(morse_code code) final override {
+  void emit(morse_code code) final {
     std::cout << "code: " << code << std::endl;
   }
-  virtual ~morseTerminal(){};
+  ~morseTerminal() override = default;
 };
 // morse do migania klawiszem na klawiaturze
 class morseLight : public MorseInterface {
 
 public:
-  std::unique_ptr<MorseInterface> clone() override {
+  std::unique_ptr<MorseInterface> clone() const override {
     return std::make_unique<morseLight>(*this);
   }
   morseLight(unsigned dot_time, unsigned dash_time, unsigned pause_time)
@@ -68,7 +68,7 @@ public:
     this->dash_time_ = dash_time;
     this->pause_time_ = pause_time;
   }
-  virtual void emit(morse_code code) final override {
+  void emit(morse_code code) final {
     for (auto znak : code.get_code()) {
       switch (znak) {
       case '.':
@@ -83,7 +83,7 @@ public:
       }
     }
   }
-  virtual ~morseLight(){};
+  ~morseLight() override = default;
 
 private:
   static void blink_scroll_lock(unsigned time);
@@ -99,15 +99,16 @@ public:
 
   // domyslnie tworze obiekt typu morse = arbitrary decision
   MorseFactory() { data_ = std::make_unique<morse>(); };
-  ~MorseFactory(){};
+  // jako ze uzywam "smart" ptr nie musze miec specjalnego destruktora
+  ~MorseFactory() = default;
   // nie chcemy zeby MorseFactory poniewaz nadpisalo to by nasze vtable
   // bylo kopiowane jezeli chcemy skopiowac obiekt
   // powinnismy pobrac obiekt wewnetrzny maybe typeid can solve that with ifs
   const MorseFactory &operator=(const MorseFactory &other); // = delete;
   MorseFactory(const MorseFactory &);                       //= delete;
   void set_output(out);
-  void set_external_info(std::string);
-  void convert(std::string) const;
+  void set_external_info(const std::string&);
+  void convert(const std::string&) const;
   void convert(double) const;
   void convert(int) const;
 

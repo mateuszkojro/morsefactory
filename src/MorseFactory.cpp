@@ -55,10 +55,10 @@ bool MorseFactory::is_whitespace(char znak) {
   return znak == '\t' || znak == '\n' || znak == ' ';
 }
 
-void MorseFactory::set_external_info(std::string text) {
+void MorseFactory::set_external_info(const std::string& text) {
   // mozna by w sumie dodac set external info for blink zeby wybrac klawisz
 
-  std::string buffer = "";
+  std::string buffer;
   std::vector<std::optional<unsigned>> options;
 
   // przechodzimy po wszytskihc literach
@@ -87,7 +87,7 @@ void MorseFactory::set_external_info(std::string text) {
   // jezeli podano za malo wartosci to wypelniamy pustymi az do czasu kiedy
   // bedziemy mieli dopowiedzni rozmiar
   while (options.size() < 5) {
-    options.push_back(std::nullopt);
+    options.emplace_back(std::nullopt);
   }
 
   // jak ktos poda wiecej wartosci to zostana po prostu zignorowane
@@ -100,7 +100,7 @@ void MorseFactory::set_external_info(std::string text) {
 
 // Klasa morse i pochodne przeciazaja emmit takze nasz konwert jest tylko
 // wraperem dookola niej
-void MorseFactory::convert(std::string text) const {
+void MorseFactory::convert(const std::string& text) const {
   data_->emit(morse_code(text));
 }
 void MorseFactory::convert(double text) const {
