@@ -39,6 +39,7 @@ add_executable(
   morse_factory
   src/main.cpp
   src/MorseFactory.cpp
+  src/OtherMorses.cpp
 )
 
 
