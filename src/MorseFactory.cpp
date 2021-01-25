@@ -1,5 +1,4 @@
 #include "MorseFactory.h"
-#include <optional>
 
 // "klika" scroll lock
 void morseLight::press_scroll_lock() {
