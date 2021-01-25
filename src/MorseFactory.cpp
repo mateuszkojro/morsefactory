@@ -27,16 +27,19 @@ enum Operation { ToFile, ToConsole, ToAudio, ToLight };
 // czyli towrzymy odpowiednia klase na naszym polu prywatnym
 void MorseFactory::set_output(out option) {
 
-  // delete data_;
+  // tworzymy obiekt odpowiedniego typu na podstawie odpowiedniego wyboru
+  // std::make_unique sluzy do tworzenia unique_ptr natomiast std::optional::value_or(val)
+  // zwraca val jezeli optional jest pusty i wartosc jezeli nie
   switch (option) {
   case out::DISK:
     data_ = std::make_unique<morseFile>(this->file_path_.value_or("a.out"));
     break;
   case out::BEEP:
-    data_ = std::make_unique<morse>(
-        this->freq_.value_or(800), this->dot_time_.value_or(200),
-        this->dash_time_.value_or(400), this->pause_time_.value_or(100),
-        this->char_pause_.value_or(100));
+    data_ = std::make_unique<morse>(this->freq_.value_or(800),
+                                    this->dot_time_.value_or(200),
+                                    this->dash_time_.value_or(400), 
+                                    this->pause_time_.value_or(100),
+                                    this->char_pause_.value_or(100));
     break;
   case out::CONSOLE:
     data_ = std::make_unique<morseTerminal>();

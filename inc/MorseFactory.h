@@ -14,6 +14,7 @@
 /*  Klasa MorseFactory
  *  Autor: Mateusz Kojro
  *  Data utworzenia:  16.01.2021
+ *  Repo: https://github.com/mateuszkojro/morsefactory
  *  Zmiany:
  *    - Lacze morse_factory z klasa morse z wczesniejszego zadania
  *    - convert, set_output ready
